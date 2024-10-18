@@ -36,12 +36,11 @@ function handleFilterButtonClick(event) {
 async function filterWorksByCategory(categoryId) {
     const gallery = document.querySelector('.gallery');
     const works = await fetchWorks()
-    gallery.innerHTML = ''; // Vider la galerie avant d'ajouter les nouveaux travaux filtrés
+    gallery.innerHTML = '';
     const filteredWorks = works.filter(work => {
         return categoryId === 'null' || work.categoryId == categoryId;
     });
 
-    // Générer les travaux filtrés
     filteredWorks.forEach(work => {
 
         const imageElement = document.createElement('img');
@@ -70,4 +69,120 @@ async function generateWork() {
 }
 
 generateWork()
+
+
+// Ajout band noir edition
+// Ajout btn modifier
+if (isLoggedIn()) {
+    updatePageForConnectedUser()
+    addEditionMode()
+}
+
+
+function updatePageForConnectedUser() {
+    const loginButton = document.querySelector(".login-button")
+    loginButton.innerHTML = 'Log Out';
+    loginButton.setAttribute('href', "#")
+    loginButton.addEventListener('click', logOutUser)
+}
+
+function addEditionMode() {
+    const blackboard = document.querySelector('.blackboard')
+    const filter = document.querySelector('.filters-contenair')
+    const modify = document.querySelector('.modal-btn')
+    blackboard.style.display = 'block'
+    filter.style.display = 'none'
+    modify.style.display = 'flex'
+}
+
+function logOutUser() {
+    localStorage.clear()
+    window.location.reload()
+}
+function isLoggedIn() {
+    return (localStorage.getItem("token") != null)
+}
+
+function openModalDeleteWork() {
+    const modalButton = document.querySelector('.modal-btn')
+    modalButton.addEventListener('click', getModalDeleteWork)
+}
+function getModalDeleteWork() {
+    const modalDeleteWork = document.querySelector('.modal-delete-work')
+    modalDeleteWork.style.display = 'block'
+}
+openModalDeleteWork()
+
+function openModalAddWork() {
+    const addPicturesModal = document.querySelector('.add-picture-modal')
+    addPicturesModal.addEventListener('click', getModalAddWork)
+}
+function getModalAddWork() {
+    const modalDeleteWork = document.querySelector('.modal-delete-work')
+    const modalAddWork = document.querySelector('.modal-add-work')
+    modalDeleteWork.style.display = 'none'
+    modalAddWork.style.display = 'block'
+}
+openModalAddWork()
+
+function previousModal() {
+    const backtToModal1 = document.querySelector('.previews-page')
+    backtToModal1.addEventListener('click', goBackModalDeleteWork)
+}
+function goBackModalDeleteWork() {
+    const modalDeleteWork = document.querySelector('.modal-delete-work')
+    const modalAddWork = document.querySelector('.modal-add-work')
+    modalDeleteWork.style.display = 'block'
+    modalAddWork.style.display = 'none'
+}
+previousModal()
+
+// function goBackToModal1() {
+//     document.querySelector(".modal-2").classList.remove("active");
+//     document.querySelector(".modal-1").classList.add("active");
+// }
+// goBackToModal1()
+
+function bindEventsModal() {
+    const closeModalElements = document.querySelectorAll('.close-modal')
+    closeModalElements.forEach(
+        (closeModalElement) => {
+            closeModalElement.addEventListener('click', (event) => {
+                event.target.closest('.modal').style.display = 'none'
+            })
+        }
+    )
+}
+
+bindEventsModal()
+
+
+
+
+async function generateWorkModal() {
+    const gallery = document.querySelector('.gallery-modal');
+    const works = await fetchWorks()
+    works.forEach(work => {
+        const imageElement = document.createElement('img');
+        const descritpionElement = document.createElement('article');
+        const trashCanElement = document.createElement('i')
+        imageElement.src = work.imageUrl;
+        trashCanElement.classList.add('fa-solid')
+        trashCanElement.classList.add('fa-trash-can')
+        descritpionElement.appendChild(trashCanElement)
+        descritpionElement.appendChild(imageElement)
+        gallery.appendChild(descritpionElement);
+    });
+
+}
+
+generateWorkModal()
+
+// element.data.set
+// element.dataset.imageId = ...
+
+
+
+
+
 
