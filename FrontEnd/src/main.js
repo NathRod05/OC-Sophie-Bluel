@@ -113,6 +113,59 @@ function getModalDeleteWork() {
 }
 openModalDeleteWork()
 
+async function generateWorkModal() {
+    const gallery = document.querySelector('.gallery-modal');
+    const works = await fetchWorks()
+    works.forEach(work => {
+        const imageElement = document.createElement('img');
+        const descritpionElement = document.createElement('article');
+        const trashCanElement = document.createElement('i')
+
+        imageElement.src = work.imageUrl;
+        trashCanElement.classList.add('fa-solid', 'fa-trash-can')
+        trashCanElement.dataset.id = work.id;
+
+        descritpionElement.appendChild(trashCanElement)
+        descritpionElement.appendChild(imageElement)
+        gallery.appendChild(descritpionElement);
+    });
+    addListenerButtonTrash()
+}
+
+generateWorkModal()
+
+async function addListenerButtonTrash() {
+    const trashs = document.querySelectorAll(".fa-trash-can");
+    trashs.forEach((trash) => {
+        trash.addEventListener("click", async function (event) {
+            event.preventDefault();
+
+            const workId = event.target.dataset.id;
+            const parentElement = event.target.closest('article');
+            if (!confirm("Êtes-vous sûr de vouloir supprimer ce travail ?")) {
+                return;
+            }
+
+            if (!workId) {
+                alert("Invalid work ID.");
+                return;
+            }
+
+            const body = { workId };
+            if (await deleteWork(body)) {
+                parentElement.remove();
+                console.log(`Work with ID ${workId} was deleted.`);
+            }
+
+            else {
+                alert('error')
+            }
+
+        });
+    });
+}
+
+
 function openModalAddWork() {
     const addPicturesModal = document.querySelector('.add-picture-modal')
     addPicturesModal.addEventListener('click', getModalAddWork)
@@ -125,6 +178,29 @@ function getModalAddWork() {
 }
 openModalAddWork()
 
+function addListenerButtonValidate() {
+    const buttonValidate = document.querySelector(".validate")
+    buttonValidate.addEventListener("submit", async function (event) {
+        event.preventDefault()
+        const work = {
+            file: event.target.querySelector("#file").value,
+            title: event.target.querySelector("#title").value,
+            category: event.target.querySelector("#category").value
+        }
+        const body = JSON.stringify(work)
+        const res = await addWork(body)
+
+        if (res) {
+            window.localStorage.setItem('token', res.token)
+            window.location.href = './index.html';
+        } else {
+            alert('L');
+        }
+
+    })
+}
+
+
 function previousModal() {
     const backtToModal1 = document.querySelector('.previews-page')
     backtToModal1.addEventListener('click', goBackModalDeleteWork)
@@ -136,12 +212,6 @@ function goBackModalDeleteWork() {
     modalAddWork.style.display = 'none'
 }
 previousModal()
-
-// function goBackToModal1() {
-//     document.querySelector(".modal-2").classList.remove("active");
-//     document.querySelector(".modal-1").classList.add("active");
-// }
-// goBackToModal1()
 
 function bindEventsModal() {
     const closeModalElements = document.querySelectorAll('.close-modal')
@@ -159,27 +229,6 @@ bindEventsModal()
 
 
 
-async function generateWorkModal() {
-    const gallery = document.querySelector('.gallery-modal');
-    const works = await fetchWorks()
-    works.forEach(work => {
-        const imageElement = document.createElement('img');
-        const descritpionElement = document.createElement('article');
-        const trashCanElement = document.createElement('i')
-        imageElement.src = work.imageUrl;
-        trashCanElement.classList.add('fa-solid')
-        trashCanElement.classList.add('fa-trash-can')
-        descritpionElement.appendChild(trashCanElement)
-        descritpionElement.appendChild(imageElement)
-        gallery.appendChild(descritpionElement);
-    });
-
-}
-
-generateWorkModal()
-
-// element.data.set
-// element.dataset.imageId = ...
 
 
 

@@ -77,12 +77,14 @@
 					<button class="previews-page"><i class="fa-solid fa-arrow-left"></i></button>
 					<button class="close-modal"><i class="fa-solid fa-x"></i></button>
 					<h1>Ajout photo</h1>
-					<div class="add-picture">
-						<i class="fa-regular fa-image"></i>
-						<button class="btn-add-picture">+ Ajouter une photo</button>
-						<p class="file-info">jpg, png: 4mo max</p>
-					</div>
 					<form action="#" method="post">
+						<div class="add-picture">
+							<i class="fa-regular fa-image"></i>
+							<label for="file" class="btn-add-picture">+ Ajouter photo</label>
+							<input type="file" name="image" id="file">
+							<img id="preview" src="#" alt="">
+							<p class="file-info">jpg, png: 4mo max</p>
+						</div>
 						<div class="form-add-picture">
 							<label for="title">Titre</label>
 							<input type="text" name="title" id="title">
