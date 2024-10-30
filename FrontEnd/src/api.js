@@ -39,13 +39,17 @@ async function deleteWork(body) {
 }
 
 async function addWork(body) {
+    const token = window.localStorage.getItem('token');
+    console.log("Authorization Header:", `Bearer ${token}`);
+    console.log("Current Timestamp:", Math.floor(Date.now() / 1000));
     const response = await fetch('http://localhost:5678/api/works', {
         method: "Post",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
         body: body
     })
     if (response.ok) {
-        const generateWork = await response.json()
-        return generateWork
+        return await response.json()
     }
 }

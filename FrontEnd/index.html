@@ -79,9 +79,11 @@
 					<h1>Ajout photo</h1>
 					<form action="#" method="post">
 						<div class="add-picture">
-							<i class="fa-regular fa-image"></i>
-							<label for="file" class="btn-add-picture">+ Ajouter photo</label>
-							<input type="file" name="image" id="file">
+							<div class="preview-picture">
+								<i class="fa-regular fa-image"></i>
+								<label for="file" class="btn-add-picture">+ Ajouter photo</label>
+								<input type="file" name="image" id="file">
+							</div>
 							<img id="preview" src="#" alt="">
 							<p class="file-info">jpg, png: 4mo max</p>
 						</div>
@@ -90,14 +92,14 @@
 							<input type="text" name="title" id="title">
 							<label for="category">Catégorie</label>
 							<select name="category" id="category">
-								<option value="1"></option>
+								<option value=""></option>
 								<option value="2">Objets</option>
 								<option value="3">Appartements</option>
 								<option value="4">Hôtels & restaurants</option>
 							</select>
 						</div>
 						<div class="line"></div>
-						<input type="submit" class="validate" value="Valider"></input>
+						<input type="submit" class="validate validated" value="Valider"></input>
 					</form>
 				</div>
 			</div>

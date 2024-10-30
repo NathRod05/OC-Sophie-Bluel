@@ -60,6 +60,7 @@ async function generateWork() {
     works.forEach(work => {
         const imageElement = document.createElement('img');
         const descritpionElement = document.createElement('article');
+        descritpionElement.dataset.id = work.id
         imageElement.src = work.imageUrl;
         descritpionElement.textContent = work.title;
         descritpionElement.appendChild(imageElement)
@@ -135,7 +136,8 @@ async function generateWorkModal() {
 generateWorkModal()
 
 async function addListenerButtonTrash() {
-    const trashs = document.querySelectorAll(".fa-trash-can");
+    const trashs = document.querySelectorAll(".fa-trash-can")
+    const gallery = document.querySelector('.gallery')
     trashs.forEach((trash) => {
         trash.addEventListener("click", async function (event) {
             event.preventDefault();
@@ -154,6 +156,10 @@ async function addListenerButtonTrash() {
             const body = { workId };
             if (await deleteWork(body)) {
                 parentElement.remove();
+                const galleryElement = Array.from(gallery.children).find((elem) => {
+                    return elem.dataset.id == workId
+                })
+                galleryElement.remove()
                 console.log(`Work with ID ${workId} was deleted.`);
             }
 
@@ -178,27 +184,96 @@ function getModalAddWork() {
 }
 openModalAddWork()
 
-function addListenerButtonValidate() {
-    const buttonValidate = document.querySelector(".validate")
-    buttonValidate.addEventListener("submit", async function (event) {
-        event.preventDefault()
-        const work = {
-            file: event.target.querySelector("#file").value,
-            title: event.target.querySelector("#title").value,
-            category: event.target.querySelector("#category").value
+function previewImage() {
+    const fileInput = document.querySelector("#file");
+    const preview = document.querySelector("#preview");
+    const previewPicture = document.querySelector('.preview-picture')
+    const fileInfo = document.querySelector('.file-info')
+
+    fileInput.addEventListener("change", function () {
+        const file = fileInput.files[0];
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.onload = function () {
+                URL.revokeObjectURL(preview.src);
+                previewPicture.style.display = 'none'
+                fileInfo.style.display = 'none'
+            };
         }
-        const body = JSON.stringify(work)
-        const res = await addWork(body)
+    });
+}
+
+function checkFormCompletion() {
+    const buttonValidate = document.querySelector(".validate");
+    const file = document.querySelector("#file").files[0];
+    const title = document.querySelector("#title").value;
+    const category = document.querySelector("#category").value;
+
+    if (file && title && category) {
+        buttonValidate.style.backgroundColor = "#1D6154";
+    } else {
+        buttonValidate.style.backgroundColor = "";
+    }
+}
+document.querySelectorAll("input, select").forEach(filled => {
+    filled.addEventListener("input", checkFormCompletion);
+});
+
+async function addListenerButtonValidate() {
+    const form = document.querySelector("form")
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const file = document.querySelector("#file").files[0];
+        const title = document.querySelector("#title").value;
+        const category = document.querySelector("#category").value;
+
+        if (!file || !title || !category) {
+            alert("Veuillez remplir tous les champs.");
+            return;
+        }
+        const work = {
+            file: file,
+            title: title,
+            category: category
+        };
+
+        const formData = new FormData();
+        formData.append("image", file);
+        formData.append("title", title);
+        formData.append("category", category);
+
+        const res = await addWork(formData);
 
         if (res) {
-            window.localStorage.setItem('token', res.token)
-            window.location.href = './index.html';
-        } else {
-            alert('L');
+            const newGalleryItem = document.createElement("div");
+            newGalleryItem.classList.add("gallery-item");
+            newGalleryItem.dataset.id = res.id;
+
+            newGalleryItem.innerHTML = `
+        <img src="${URL.createObjectURL(work.file)}" alt="${work.title}">
+        <p>${work.title}</p>
+    `;
+
+            const gallery = document.querySelector(".gallery");
+            gallery.appendChild(newGalleryItem);
+
+            newGalleryItem.querySelector("img").onload = () => {
+                URL.revokeObjectURL(newGalleryItem.querySelector("img").src);
+            };
+
+            const modal = document.querySelector('.modal-add-work')
+            modal.style.display = 'none'
+        }
+        else {
+            alert('Erreur lors de la validation');
         }
 
     })
 }
+previewImage()
+checkFormCompletion()
+addListenerButtonValidate()
 
 
 function previousModal() {
