@@ -56,6 +56,7 @@ generateFilters()
 
 async function generateWork() {
     const gallery = document.querySelector('.gallery');
+    gallery.innerHTML = ""
     const works = await fetchWorks()
     works.forEach(work => {
         const imageElement = document.createElement('img');
@@ -116,6 +117,7 @@ openModalDeleteWork()
 
 async function generateWorkModal() {
     const gallery = document.querySelector('.gallery-modal');
+    gallery.innerHTML = ""
     const works = await fetchWorks()
     works.forEach(work => {
         const imageElement = document.createElement('img');
@@ -246,30 +248,26 @@ async function addListenerButtonValidate() {
         const res = await addWork(formData);
 
         if (res) {
-            const newGalleryItem = document.createElement("div");
-            newGalleryItem.classList.add("gallery-item");
-            newGalleryItem.dataset.id = res.id;
-
-            newGalleryItem.innerHTML = `
-        <img src="${URL.createObjectURL(work.file)}" alt="${work.title}">
-        <p>${work.title}</p>
-    `;
-
-            const gallery = document.querySelector(".gallery");
-            gallery.appendChild(newGalleryItem);
-
-            newGalleryItem.querySelector("img").onload = () => {
-                URL.revokeObjectURL(newGalleryItem.querySelector("img").src);
-            };
-
+            generateWork()
+            generateWorkModal()
             const modal = document.querySelector('.modal-add-work')
             modal.style.display = 'none'
+            form.reset()
+            resetFileInput()
         }
         else {
             alert('Erreur lors de la validation');
         }
 
     })
+}
+function resetFileInput() {
+    const preview = document.querySelector("#preview");
+    const previewPicture = document.querySelector('.preview-picture')
+    const fileInfo = document.querySelector('.file-info')
+    preview.src = ''
+    previewPicture.style.display = 'initial'
+    fileInfo.style.display = 'initial'
 }
 previewImage()
 checkFormCompletion()
