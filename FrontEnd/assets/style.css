@@ -3,7 +3,88 @@
    License: none (public domain)
 */
 
-* {
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -65,10 +146,17 @@ body {
 header {
 	display: flex;
 	justify-content: space-between;
-	margin: 50px 0
+	margin: 50px 0;
+}
+
+.mode-edition header {
+	margin-top: 97px
 }
 
 .blackboard {
+	position: absolute;
+	left: 0;
+	top: 0;
 	width: 100%;
 	height: 59px;
 	background-color: #000;
@@ -76,7 +164,9 @@ header {
 	color: #ffffff;
 }
 
-.mode-edition {
+
+
+.edition {
 	display: flex;
 	justify-content: center;
 	gap: 10px;
@@ -165,6 +255,11 @@ li:hover {
 	margin-bottom: 0.5em;
 }
 
+.intro-p {
+	width: 500px;
+	height: 192px;
+}
+
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
@@ -199,7 +294,9 @@ li:hover {
 }
 
 .overlay {
-	position: absolute;
+	position: fixed;
+	left: 0;
+	top: 0;
 	width: 100%;
 	height: 100%;
 	background: #0000004D;

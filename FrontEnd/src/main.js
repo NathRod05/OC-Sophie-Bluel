@@ -72,29 +72,35 @@ async function generateWork() {
 
 generateWork()
 
-
-// Ajout band noir edition
-// Ajout btn modifier
 if (isLoggedIn()) {
-    updatePageForConnectedUser()
-    addEditionMode()
+    updatePageForConnectedUser();
+} else {
+    toggleEditionMode();
 }
-
-
 function updatePageForConnectedUser() {
-    const loginButton = document.querySelector(".login-button")
+    const loginButton = document.querySelector(".login-button");
     loginButton.innerHTML = 'Log Out';
-    loginButton.setAttribute('href', "#")
-    loginButton.addEventListener('click', logOutUser)
+    loginButton.setAttribute('href', "#");
+    loginButton.addEventListener('click', function () {
+        logOutUser();
+    });
+    toggleEditionMode()
 }
 
-function addEditionMode() {
-    const blackboard = document.querySelector('.blackboard')
-    const filter = document.querySelector('.filters-contenair')
-    const modify = document.querySelector('.modal-btn')
-    blackboard.style.display = 'block'
-    filter.style.display = 'none'
-    modify.style.display = 'flex'
+function toggleEditionMode() {
+    const isLoggedIn = localStorage.getItem("token") !== null;
+    const blackboard = document.querySelector('.blackboard');
+    const filter = document.querySelector('.filters-contenair');
+    const modify = document.querySelector('.modal-btn');
+
+    if (isLoggedIn) {
+        blackboard.style.display = 'block';
+        filter.style.display = 'none';
+        modify.style.display = 'flex';
+        document.body.classList.add('mode-edition');
+    } else {
+        document.body.classList.remove('mode-edition');
+    }
 }
 
 function logOutUser() {
