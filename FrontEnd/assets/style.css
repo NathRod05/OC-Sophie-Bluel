@@ -626,3 +626,10 @@ footer nav ul {
 	font-family: 'Work Sans';
 	font-size: 14px;
 }
+
+.remove-image-btn {
+	position: absolute;
+	right: 257px;
+	top: 135px;
+	color: #626060ed;
+}

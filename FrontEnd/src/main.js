@@ -267,6 +267,7 @@ async function addListenerButtonValidate() {
 
     })
 }
+
 function resetFileInput() {
     const preview = document.querySelector("#preview");
     const previewPicture = document.querySelector('.preview-picture')
@@ -275,14 +276,16 @@ function resetFileInput() {
     previewPicture.style.display = 'initial'
     fileInfo.style.display = 'initial'
 }
+
+
 previewImage()
 checkFormCompletion()
 addListenerButtonValidate()
 
 
 function previousModal() {
-    const backtToModal1 = document.querySelector('.previews-page')
-    backtToModal1.addEventListener('click', goBackModalDeleteWork)
+    const backtToModalDeleteWork = document.querySelector('.previews-page')
+    backtToModalDeleteWork.addEventListener('click', goBackModalDeleteWork)
 }
 function goBackModalDeleteWork() {
     const modalDeleteWork = document.querySelector('.modal-delete-work')
@@ -305,12 +308,35 @@ function bindEventsModal() {
 
 bindEventsModal()
 
+function addRemoveImageButton() {
+    const previewContainer = document.querySelector('.add-picture');
+    const preview = document.querySelector("#preview");
+    const previewPicture = document.querySelector('.preview-picture');
+    const fileInfo = document.querySelector('.file-info');
+    const fileInput = document.querySelector("#file");
+    const removeButton = document.createElement("i");
+    removeButton.className = "fa-solid fa-xmark remove-image-btn";
+    previewContainer.appendChild(removeButton);
+    removeButton.style.display = "none"
+    fileInput.addEventListener("change", function () {
+        if (file) {
+            {
+                URL.revokeObjectURL(preview.src);
+                previewPicture.style.display = 'none';
+                fileInfo.style.display = 'none';
+                removeButton.style.display = "block";
+            };
+        } else {
+            removeButton.style.display = "none";
+        }
+    });
+    removeButton.addEventListener("click", function () {
+        preview.src = '';
+        fileInput.value = '';
+        previewPicture.style.display = 'block';
+        fileInfo.style.display = 'block';
+        removeButton.style.display = "none";
+    });
+}
 
-
-
-
-
-
-
-
-
+addRemoveImageButton();
